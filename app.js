@@ -2,7 +2,6 @@ const path = require('path');
 const express = require('express');
 const fs = require('fs');
 var cors = require('cors')
-const helmet = require('helmet');
 const compression = require('compression');
 const morgan = require('morgan')
 
@@ -25,7 +24,7 @@ app.use(cors());
 app.use(express.json());
 
 //Helmet
-app.use(helmet());
+
 app.use(compression())
 app.use(morgan('combined',{stream: accessLogServices}))
 
@@ -33,6 +32,10 @@ app.use('/user', userRoutes);
 app.use('/user', expenseRoutes);
 app.use('/purchase', purchaseRoutes);
 app.use('/password', resetPasswordRoutes);
+
+app.use((req,res) => {
+    res.sendFile(path.join(__dirname,`views/${req.url}`))
+})
 
 User.hasMany(Expense);
 Expense.belongsTo(User);
@@ -42,6 +45,8 @@ Order.belongsTo(User);
 
 User.hasMany(Forgotpassword);
 Forgotpassword.belongsTo(User);
+
+
 
 sequelize.sync()
     .then(() => {
