@@ -16,7 +16,7 @@ function addNewExpense(e) {
     }
 
     console.log(expenseDetails)
-    axios.post('http://localhost:3000/user/addexpense', expenseDetails, { headers: { "Authorization": token } }).then((response) => {
+    axios.post('/user/addexpense', expenseDetails, { headers: { "Authorization": token } }).then((response) => {
 
         if (response.status === 201) {
             e.target.reset()
@@ -65,7 +65,7 @@ function addNewExpensetoUI(expense) {
 
 ////////// Premium Checkers //////////
 function premium() {
-    axios.get('http://localhost:3000/user/premium', { headers: { "Authorization": token } }).then(response => {
+    axios.get('/user/premium', { headers: { "Authorization": token } }).then(response => {
         if (response.status === 200) {
             const premium = document.getElementById('premium')
             premium.innerHTML = (response.data.user.ispremiumuser == true) ? 'premium user' : ''
@@ -78,7 +78,7 @@ function premium() {
 
 function ispremium() {
     return new Promise((resolve,reject) => {
-        axios.get('http://localhost:3000/user/premium', { headers: { "Authorization": token } }).then(response => {
+        axios.get('/user/premium', { headers: { "Authorization": token } }).then(response => {
         console.log(response.data.user.ispremiumuser)
         if (response.data.user.ispremiumuser) 
         { resolve (1) }
@@ -93,7 +93,7 @@ function ispremium() {
 
 ////////// Delete Expenses //////////
 function deleteExpense(e, expenseid) {
-    axios.delete(`http://localhost:3000/user/deleteexpense/${expenseid}`, { headers: { "Authorization": token } }).then((response) => {
+    axios.delete(`/user/deleteexpense/${expenseid}`, { headers: { "Authorization": token } }).then((response) => {
 
         if (response.status === 204) {
             removeExpensefromUI(expenseid);
@@ -121,7 +121,7 @@ function showError(err) {
 ////////// Download Expenses //////////
 async function download() {
     if (await ispremium()) {
-        axios.get('http://localhost:3000/user/download', { headers: { "Authorization": token } })
+        axios.get('/user/download', { headers: { "Authorization": token } })
             .then((response) => {
                 console.log(response.data.fileURL)
                 if (response.status === 200) {
@@ -147,7 +147,7 @@ async function download() {
 
 ////////// Payment through Razorpay //////////
 document.getElementById('rzp-button1').onclick = async function (e) {
-    const response = await axios.get('http://localhost:3000/purchase/premiummembership', { headers: { "Authorization": token } });
+    const response = await axios.get('/purchase/premiummembership', { headers: { "Authorization": token } });
     console.log(response);
     var options = {
         "key": response.data.key_id,
@@ -172,7 +172,7 @@ document.getElementById('rzp-button1').onclick = async function (e) {
             console.log(obj);
             try {
                 await axios.post(
-                    'http://localhost:3000/purchase/updatetransactionstatus',
+                    '/purchase/updatetransactionstatus',
                     obj, config)
                 alert('You are a premium user now');
                 premium();
@@ -205,7 +205,7 @@ async function showleadboard(e) {
         const board = document.querySelector('#board')
         e.preventDefault()
         board.innerHTML = '';
-        axios.get('http://localhost:3000/user/leadboard', { headers: { "Authorization": token } }).then((result) => {
+        axios.get('/user/leadboard', { headers: { "Authorization": token } }).then((result) => {
             console.log("leaderboard is ");
             console.log(result.data);
 
@@ -272,7 +272,7 @@ window.onload = async () => {
     // const selectedExpensesPerPageElement = document.getElementById('selectedExpensesPerPage');
     // selectedExpensesPerPageElement.innerText = `Showing ${expensesPerPage} expenses per page`;
 
-    await axios.get('http://localhost:3000/user/getexpenses', { headers: { "Authorization": token } }).then(response => {
+    await axios.get('/user/getexpenses', { headers: { "Authorization": token } }).then(response => {
         if (response.status === 200) {
             expenses = response.data.expenses;
             totalPages = Math.ceil(expenses.length / expensesPerPage);
@@ -294,7 +294,7 @@ function showExpenses(page) {
 
     const expensesPerPage = getExpensesPerPagePreference();
 
-    axios.get('http://localhost:3000/user/getexpenses', { headers: { "Authorization": token } })
+    axios.get('/user/getexpenses', { headers: { "Authorization": token } })
     .then((response) => {
         const expenses = response.data.expenses;
         currentPage = page;

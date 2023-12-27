@@ -33,7 +33,7 @@ const forgotpassword = async (req, res) => {
                     throw new Error(err)
                 })
 
-            const resetLink = `http://localHost:3000/password/resetpassword/${newUuid}?token=${resetToken}`;
+            const resetLink = `http://${process.env.IP}:3000/password/resetpassword/${newUuid}?token=${resetToken}`;
             const subject = "Password Reset Request";
             const textContent = `Click the following link to reset your password: ${resetLink}`;
 
@@ -45,8 +45,7 @@ const forgotpassword = async (req, res) => {
                 to: receivers,
                 subject,
                 textContent,
-            })
-                .then(response => {
+            }).then(response => {
                     console.log('Email sent successfully:', response);
                     return res.status(202).json({ message: 'Link to reset password sent to your mail ', sucess: true })
                 })

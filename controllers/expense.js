@@ -4,12 +4,14 @@ const User = require('../models/users')
 const sequelize = require('../util/database');
 const s3Services = require('../services/s3Services')
 const files = require('../models/downloadedfiles')
+const dotenv = require('dotenv')
+dotenv.config()
 
 //////////adding expenses
 
 const addexpense = async (req, res) => {
     const t = await sequelize.transaction();
-    const id = jwt.verify(req.headers.authorization, 'SECRETKEY')
+    const id = jwt.verify(req.headers.authorization, process.env.TOKEN_SECRET)
     console.log(req.body)
     console.log('hello vinay')
     console.log(id)
@@ -53,7 +55,7 @@ const getexpenses = (req, res) => {
 //////////deleting expense
 
 const deleteexpense = async (req, res) => {
-    const userId = jwt.verify(req.headers.authorization, 'SECRETKEY')
+    const userId = jwt.verify(req.headers.authorization, process.env.TOKEN_SECRET)
     console.log(userId)
     const expenseid = req.params.expenseid;
     console.log(expenseid)
