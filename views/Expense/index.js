@@ -72,6 +72,10 @@ function premium() {
             username.innerHTML = `Hi! ${response.data.user.name}`
             premium.innerHTML = (response.data.user.ispremiumuser == true) ? 'premium user' : ''
             premium.style.color = 'gold'
+            if(response.data.user.ispremiumuser){
+                const buybutton = document.getElementById('rzp-button1') 
+                buybutton.remove()
+            }
         } else {
             throw new Error();
         }
