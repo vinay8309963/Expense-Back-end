@@ -68,6 +68,8 @@ function premium() {
     axios.get('/user/premium', { headers: { "Authorization": token } }).then(response => {
         if (response.status === 200) {
             const premium = document.getElementById('premium')
+            const username = document.getElementById('username');
+            username.innerHTML = `Hi! ${response.data.user.name}`
             premium.innerHTML = (response.data.user.ispremiumuser == true) ? 'premium user' : ''
             premium.style.color = 'gold'
         } else {

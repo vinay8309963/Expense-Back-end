@@ -45,14 +45,17 @@ const forgotpassword = async (req, res) => {
                 to: receivers,
                 subject,
                 textContent,
-            }).then(response => {
+            })
+                .then(response => {
                     console.log('Email sent successfully:', response);
-                    return res.status(202).json({ message: 'Link to reset password sent to your mail ', sucess: true })
+                    return res.status(202).json({ message: 'Link to reset password sent to your mail', success: true });
                 })
-                .catch(err => { throw new Error(err) });
-
+                .catch(err => {
+                    console.error('Error sending email:', err.response.body);
+                    return res.status(500).json({ message: 'Error sending email', success: false });
+                });
         } else {
-            throw new Error('User doesnt exist')
+            throw new Error('User does not exist')
         }
     } catch (err) {
         console.error(err)
